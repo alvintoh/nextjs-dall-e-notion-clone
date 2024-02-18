@@ -8,13 +8,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-import { Plus } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useMutation } from "@tanstack/react-query";
 
 import axios from "axios"; // Import the 'axios' package
 import { useRouter } from "next/navigation";
+import { create } from "domain";
 
 type Props = {};
 
@@ -35,11 +36,13 @@ const CreateNoteDialog = (props: Props) => {
       return;
     }
     createNotebook.mutate(undefined, {
-      onSuccess: () => {
-        console.log("yayy note created");
+      onSuccess: ({ note_id }) => {
+        console.log("created new note: ", { note_id });
+        router.push(`/notebook/${note_id}`);
       },
       onError: (error) => {
         console.error(error);
+        window.alert("Failed to create new notebook");
       },
     });
   };
@@ -72,7 +75,15 @@ const CreateNoteDialog = (props: Props) => {
             <Button type="reset" variant={"secondary"}>
               Cancel
             </Button>
-            <Button className="bg-green-600">Create</Button>
+            <Button
+              className="bg-green-600"
+              disabled={createNotebook.isPending}
+            >
+              {createNotebook.isPending && (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              )}
+              Create
+            </Button>
           </div>
         </form>
       </DialogContent>
