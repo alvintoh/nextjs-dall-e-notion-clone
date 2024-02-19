@@ -2,6 +2,8 @@
 import React from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
+import { Button } from "./ui/button";
+import TipTapMenuBar from "./TipTapMenuBar";
 
 type Props = {};
 
@@ -16,11 +18,15 @@ const TipTapEditor = (props: Props) => {
     },
   });
   return (
-    <div>
-      <div>
+    <>
+      <div className="flex">
+        {editor && <TipTapMenuBar editor={editor} />}
+        <Button>Saved</Button>
+      </div>
+      <div className="prose">
         <EditorContent editor={editor} />
       </div>
-    </div>
+    </>
   );
 };
 
