@@ -1,3 +1,4 @@
+import DeleteButton from "@/components/DeleteButton";
 import TipTapEditor from "@/components/TipTapEditor";
 import { Button } from "@/components/ui/button";
 import { clerk } from "@/lib/clerk-server";
@@ -16,7 +17,7 @@ type Props = {
 };
 
 const NotebookPage = async ({ params: { noteId } }: Props) => {
-  const { userId } = auth();
+  const { userId } = await auth();
   if (!userId) {
     return redirect("/dashboard");
   }
@@ -33,7 +34,7 @@ const NotebookPage = async ({ params: { noteId } }: Props) => {
 
   return (
     <div className="min-h-screen grainy p-8">
-      <div className="max-4xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <div className="border shadow-xl border-stone-200 rounded-lg p-4 flex items-center">
           <Link href="/dashboard">
             <Button className="bg-green-600" size="sm">
@@ -44,10 +45,13 @@ const NotebookPage = async ({ params: { noteId } }: Props) => {
           <span className="font-semibold">
             {user.firstName} {user.lastName}
           </span>
-          <span className="inline-block mx-1"></span>
-          <span className="text-stone-500 font-semibold">/ {note.name}</span>
-          <div className="ml-auto">DELETE BUTTON</div>
+          <span className="inline-block mx-1">/</span>
+          <span className="text-stone-500 font-semibold">{note.name}</span>
+          <div className="ml-auto">
+            <DeleteButton noteId={note.id} />
+          </div>
         </div>
+
         <div className="h-4"></div>
         <div className="border-stone-200 shadow-xl border rounded-lg px-16 py-8 w-full">
           <TipTapEditor note={note} />
